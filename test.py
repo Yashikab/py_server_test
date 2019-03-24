@@ -38,7 +38,21 @@ def a_book(user_id):
 @post('/tests/signup')
 def create_info():
     try:
-        tests.append(request.json)
+        body = request.params
+        if body.user_id is None or body.password is None:
+            response.status = 400
+            return {
+                    "message": "Account creation failed",
+                    "cause": "required user_id and password"
+                    }
+        else:
+            form = {}
+            form["user_id"] = body.user_id
+            form["password"] = body.password
+            if body.nickname is None:
+                form["nickname"] = body.user_id
+            else:
+                form["nickname"] = body.nickname
         response.status = 200
         return request.json
     except:
