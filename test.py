@@ -1,3 +1,5 @@
+#code: utf-8
+
 from bottle import route, run 
 from bottle import post, get, put, delete, request, response
 import json
