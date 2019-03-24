@@ -1,5 +1,5 @@
 #code: utf-8
-
+import os
 from bottle import route, run 
 from bottle import post, get, put, delete, request, response
 import json
@@ -55,4 +55,4 @@ def delete_info(id):
         response.status = 404
         return {}
 
-run (host='localhost', port=8081, debug=True, reloader=True)
+run (host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))
