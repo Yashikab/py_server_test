@@ -8,6 +8,12 @@ tests = [
         {'user_id': "TaroYamada", 'password': 'PaSSwd4TY', 'nickname': 'たろー', 'comment': '僕は元気です'}
 ]
 
+def _make_format(msg: str, obj: dict) -> dict:
+    ret_dict = {}
+    ret_dict["message"] = msg
+    ret_dict["user"] = obj
+    return obj
+
 @get('/tests')
 def tests_list():
     response.headers['Content-Type'] = 'application/json'
@@ -15,28 +21,35 @@ def tests_list():
     return json.dumps(tests)
 
 @get('/tests/users/<user_id>')
-def a_book(id):
-    search = filter(lambda book: book['id'] == id, tests)
-    obj = next(search, None)
-    if obj is not None:
-        return obj
-    else:
-        response.status = 404 
-        return {}
+def a_book(user_id):
+    try:
+        search = filter(lambda t: t['user_id'] == user_id, tests)
+        obj = next(search, None)
+        if obj is not None:
+            response.status = 200
+            return _make_format("User details by user_id", obj)
+        else:
+            response.status = 404 
+            return {"message":"No User found"}
+    except:
+        response.status = 401
+        return {"message":"Authentication Faild"}
 
 @post('/tests/signup')
 def create_info():
     tests.append(request.json)
+    response.status = 200
     return request.json
 
 @put('/tests/users/<user_id>')
-def update_info(id):
+def update_info(user_id):
     search = filter(lambda book: book['id'] == id, tests)
     obj = next(search, None)
 
     if obj is not None:
         index = tests.index(obj)
         tests[index] = request.json
+        response.status = 200
         return request.json
     else:
         response.status = 404 
@@ -50,6 +63,7 @@ def delete_info(id):
     if obj is not None:
         index = tests.index(obj)
         del tests[index]
+        response.status = 200
         return {}
     else:
         response.status = 404
