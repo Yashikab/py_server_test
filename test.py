@@ -1,11 +1,11 @@
-#code: utf-8
+# -*- coding: utf-8 -*-
 import os
 from bottle import route, run 
 from bottle import post, get, put, delete, request, response
 import json
 
 tests = [ 
-        {'user_id': "TaroYamada", 'passwird': 'PaSSwd4TY', 'nickname': 'たろー', 'comment': '僕は元気です'}
+        {'user_id': "TaroYamada", 'password': 'PaSSwd4TY', 'nickname': 'たろー', 'comment': '僕は元気です'}
 ]
 
 @get('/tests')
