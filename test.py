@@ -37,9 +37,17 @@ def a_book(user_id):
 
 @post('/tests/signup')
 def create_info():
-    tests.append(request.json)
-    response.status = 200
-    return request.json
+    try:
+        tests.append(request.json)
+        response.status = 200
+        return request.json
+    except:
+        response.status = 400
+        return {
+                "message": "Account creation failed",
+                "cause": "required user_id and password"
+                }
+
 
 @put('/tests/users/<user_id>')
 def update_info(user_id):
@@ -64,7 +72,7 @@ def delete_info(id):
         index = tests.index(obj)
         del tests[index]
         response.status = 200
-        return {}
+        return {"message": "Account and user successfully removed"}
     else:
         response.status = 404
         return {}
